@@ -39,5 +39,5 @@ async function main(url) {
 }
 
 
-let url = 'https://www.abchina.com/cn/PersonalServices/Quotation/bwbll/201511/t20151126_807920.htm';
+let url = 'https://www.abchina.com/cn/PersonalServices/Quotation/bwbll/';
 main(url);

@@ -8,16 +8,21 @@ async function crawler(url) {
     const page = await browser.newPage();
 
     await page.goto(url);
-    
-    const content = await page.content();
-    const $ = cheerio.load(content);
 
+    let content = await page.content();
+    let $ = cheerio.load(content);
+
+    const link = $('div.per_bank_content a[title*="人民币存款利率表"]').attr('href');
+    const fullUrl = new URL(link, url).href
+    
+    await page.goto(fullUrl);
+    
+    content = await page.content();
+    $ = cheerio.load(content);
     const table = $('table');
     
     let targetRow;
-
     const rows = table.find('tr');
-
     rows.each((i, row) => {
         const firstColText = $(row).find('td').eq(0).text();
         if (firstColText.indexOf('活期') != -1) {
@@ -41,5 +46,5 @@ async function main(url) {
 }
 
 
-let url = 'https://www.bankofchina.com/fimarkets/lilv/fd31/202306/t20230608_23194241.html';
+let url = 'https://www.bankofchina.com/fimarkets/lilv/';
 main(url);

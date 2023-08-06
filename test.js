@@ -1,18 +1,24 @@
-const str = "fafsdf";
+const puppeteer = require('puppeteer');
+const cheerio = require('cheerio');
 
+async function crawler(url) {
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
 
-console.log(str);
-console.log(str.indexOf('f'));
-console.log(str.indexOf('z'));
+    await page.goto(url);
 
-let a = ['asadf','sadf'];
-console.log(a[0]);
+    const content = await page.content();
+    const $ = cheerio.load(content);
 
-console.log('asfd','sadf');
+    let table = $('#ck table');
+    $('table tr').each((i, row) => {
+        $(row).find('td').each((j, col) => {
+            console.log($(col).text().trim());
+        })
+    })
 
-const t = 1;
-console.log(`num: ${t}`);
+    await browser.close();
+}
 
-console.log(typeof Number('12.12312'));
-
-console.log(parseFloat('12.213'));
+let url = "https://www.icbc.com.cn";
+crawler(url);
